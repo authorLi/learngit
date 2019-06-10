@@ -8,3 +8,5 @@ Creating a new branch is quick And simple.
 =======
 Creating a new branch is quick and simple.
 >>>>>>> feature1
+
+Git is so easy!
