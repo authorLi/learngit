@@ -1,0 +1,125 @@
+mkdir git
+cd git
+pwd
+
+git init 初始化库
+
+git add readme.txt     他实际上就是把要提交的文件修改放到暂存区
+git commit -m "更改的内容"     而它实际上就可以一次性把暂存区的所有修改提交到分支
+
+git status 掌握工作区的状态
+git diff 查看修改内容
+
+git log 查看从最近到最远的提交日志，如果嫌输出信息多就可以加上 --pretty=online参数这样会精简显示
+
+回退版本
+HEAD表示当前版本，HEAD^表示上一版本，回退前100个版本就要是HEAD~100
+git reset --hard HEAD^ 表示回退到上一版本
+git reflog 记录每一次命令，可以查看命令历史，以便确定要回到那个版本
+这可太厉害了！！！
+
+如果第一次修改添加到了暂存区之后没有立刻commit，而是又对同一文件进行了修改，但是又没有放到暂存区就直接commit了，这会出错，即第一次的修改会被提交，第二次的修改不会被提交。提交后可以用
+（git diff HEAD -- 文件名）
+来查看工作区和版本库里面最新版本的区别
+
+git checkout -- readme.txt 把readme.txt文件在工作区的修改撤销
+  如果readme.txt自修改后还没有放到暂存区，现在，撤销修改就回到和版本库一摸一样的状态
+  如果readme.txt已添加到暂存区后，又做了修改撤销修改就回到添加到暂存区的状态
+  如果此命令没有输入“--”就变成了切换到另一分支的命令
+git reset HEAD readme.txt可以把暂存区的修改撤销掉，重新放回工作区
+
+git rm readme.txt 删除版本库里的指定文件，并需要git commit来完成删除	
+
+创建SSH KEY
+ssh-keygen -t rsa -C "524894052@qq.com"
+
+添加远程库
+git remote add origin git@github.com:authorLi/learngit.git
+origin是远程仓库的名字
+把本地库的内容推送到远程，用git push命令，实际上就是把当前分支master推送到远程
+（由于远程库是空的，所以第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送到远程新的master分支，还会把本地的master分支和远程的master分支关联起来，以后的推送或拉取时就可以简化命令）
+从现在起只要本地做了提交就可以通过命令：
+git push origin master
+把本地master分支的最新修改推送至github
+
+将已经在远程github创建好的仓库克隆至本地
+git clone git@github.com:authorLi/gitskills.git
+
+创建dev分支并切换至dev分支
+git checkout -b dev       -b表示创建并切换
+这条命令相当于（git branch dev）和（git checkout dev）两条命令
+
+查看当前分支
+git branch     它会列出所有分支，当前分支前面会标一个’*‘号
+
+合并分支
+git merge dev     它用于合并指定分支到当前分支
+
+删除分支
+git branch -d dev
+
+分支冲突问题：
+当Git无法自动合并分支时，就必须先解决冲突。解决冲突后，再提交，合并完成。
+解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
+用  git log --graph  命令可以看到分支合并图
+
+当你在工作时，突然有一个bug要修改，然而手头的工作还没有做完还不能提交，这个时候使用：
+git stash
+它可以把工作现场储存起来相当于游戏存档，当你修改完bug，想要读档时，可以使用
+1.git stash apply  但是恢复后，stash的内容并不删除，你需要使用  git stash drop 来删除
+2.git stash pop  它会在恢复的同时把stash内容也删了
+可以使用  git stash lit  查看“存档列表”
+在查看列表时也可以使用  git stash apply stash@{0}  来恢复指定的“存档”
+
+如果建立了分支，并且完成了开发，就在要进行分支的合并时，突然有人说不需要这个功能了，就要面临删除此分支。如果正常删除分支的话，Git会提醒你分支并没有合并，如果要删除的话可能会丢失数据，如果要强行删除要使用-D参数，命令：
+git branch -D 分支名
+另：开发一个新的功能最好是新建一个feature分支
+
+查看远程库的信息
+git remote
+或用另一条命令来显示更详细的信息
+git remote -v
+推送分支
+git push origin 分支名     origin是远程的名字
+创建远程origin的dev分支到本地
+git checkout -b dev origin/dev
+如果推送的提交有冲突，可以先使用
+git pull
+把最新的提交从origin/dev上拉取下来，然后在本地合并，解决bug后再进行推送
+指定本地dev和远程origin/dev分支的链接
+git branch --set-upstream-to=origin/dev dev
+把本地未push的分叉提交历史整理成一条直线
+git rebase
+
+创建标签
+git tag 标签名
+
+查看所有标签
+git tag
+默认标签是打在最近的commit上的，也可以找到历史提交的commit id并打上标签
+git tag 标签名 commit id
+查看标签信息
+git show 标签名
+创建带有说明的标签 -a指定标签名 -m指定说明文字
+git tag -a v1.0 -m "version 0.1 released" 1094abd(这里是commit id)
+
+删除标签
+git tag -d 标签名
+
+推送某个标签到远程
+git push origin 标签名
+
+一次性推送全部尚未推送到远程的本地标签
+git push origin --tags
+
+删除远程的标签（需要先删除对应的本地的标签）
+git push origin :refs/tags/标签名
+
+删除已有的远程库
+git remote rm origin(远程库名)
+
+其他命令：
+git config --global color.ui true
+
+给git命令配置别名
+git config --global alias.st status 这样以后输入git st即可起到git status的效果
