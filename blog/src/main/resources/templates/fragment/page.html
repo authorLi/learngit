@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="container">
+    <div class="row pad-15">
+        <div class="col-md-12">
+            <nav class="pagination-outer" aria-label="Page navigation" data-th-fragment="page"
+                 data-th-if="${model.blogModel.total} gt 0" data-th-object="${model.blogModel.pageNum}">
+                <ul class="pagination">
+                    <li class="page-item" th:if="${model.blogModel.hasPreviousPage}">
+                        <a class="page-link" th:href="${#httpServletRequest.requestURL} + '?pageNum=1'">首页</a>
+                    </li>
+                    <li class="page-item"  th:if="${model.blogModel.hasPreviousPage}">
+                        <a href="#" class="page-link" aria-label="Previous" th:href="${#httpServletRequest.requestURL} + '?pageNum=' + ${model.blogModel.prePage}">
+                            <span aria-hidden="true">«</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="nav:${model.blogModel.navigatepageNums}">
+                        <a class="page-link" th:text="${nav}"
+                           th:if="${nav != model.blogModel.pageNum}" th:href="${#httpServletRequest.requestURL} + '?pageNum=' + ${nav}">
+                            <span style="font-weight: bold;background: #6faed9;" th:if="${nav == model.blogModel.pageNum}"
+                                  th:text="${nav}"></span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:if="${model.blogModel.hasNextPage}">
+                        <a href="#" class="page-link" aria-label="Next" th:href="${#httpServletRequest.requestURL} + '?pageNum=' + ${model.blogModel.nextPage}">
+                            <span aria-hidden="true">»</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:if="${model.blogModel.pages} gt 1">
+                        <a class="page-link" th:href="${#httpServletRequest.requestURL} + '?pageNum=' + ${model.blogModel.pages}">尾页</a>
+                    </li>
+                </ul>
+                <div class="col-md-12" th:if="${model.blogModel.pages} ne 0">
+                    当前第 [[${model.blogModel.pageNum}]]页,共 [[${model.blogModel.pages}]] 页.共查询到 [[${model.blogModel.total}]] 条记录
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<div>
+<!--<nav data-th-fragment="page" data-th-if="${model.blogModel.total} gt 0" data-th-object="${model.blogModel.pageNum}"-->
+     <!--aria-label="Page navigation">-->
+    <!--&lt;!&ndash;显示分页信息&ndash;&gt;-->
+    <!--<div class="modal-footer no-margin-top">-->
+        <!--<div class="col-md-6">-->
+            <!--当前第 [[${model.blogModel.pageNum}]]页,共 [[${model.blogModel.pages}]] 页.一共 [[${model.blogModel.total}]] 条记录-->
+        <!--</div>-->
+
+        <!--<ul class="pagination pull-right no-margin">-->
+            <!--<li th:if="${model.blogModel.hasPreviousPage}">-->
+                <!--<a th:href="'/index?pageNum=1'">首页</a>-->
+            <!--</li>-->
+
+            <!--<li class="prev" th:if="${model.blogModel.hasPreviousPage}">-->
+                <!--<a th:href="'/index?pageNum='+${model.blogModel.prePage}">-->
+                    <!--<i class="ace-icon fa fa-angle-double-left"></i>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--&lt;!&ndash;遍历条数&ndash;&gt;-->
+            <!--<li th:each="nav:${model.blogModel.navigatepageNums}">-->
+                <!--<a th:href="'/index?pageNum='+${nav}" th:text="${nav}"-->
+                   <!--th:if="${nav != model.blogModel.pageNum}"></a>-->
+                <!--<span style="font-weight: bold;background: #6faed9;" th:if="${nav == model.blogModel.pageNum}"-->
+                      <!--th:text="${nav}"></span>-->
+            <!--</li>-->
+
+            <!--<li class="next" th:if="${model.blogModel.hasNextPage}">-->
+                <!--<a th:href="'/index?pageNum='+${model.blogModel.nextPage}">-->
+                    <!--<i class="ace-icon fa fa-angle-double-right"></i>-->
+                <!--</a>-->
+            <!--</li>-->
+
+            <!--<li>-->
+                <!--<a th:href="'/index?pageNum='+${model.blogModel.pages}">尾页</a>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+
+    <!--<div>当前页号：<span th:text="${model.blogModel.pageNum}"></span></div>-->
+    <!--<div>每页条数：<span th:text="${model.blogModel.pageSize}"></span></div>-->
+    <!--<div>起始行号：<span th:text="${model.blogModel.startRow}"></span></div>-->
+    <!--<div>终止行号：<span th:text="${model.blogModel.endRow}"></span></div>-->
+    <!--<div>总结果数：<span th:text="${model.blogModel.total}"></span></div>-->
+    <!--<div>总页数：<span th:text="${model.blogModel.pages}"></span></div>-->
+    <!--<hr/>-->
+    <!--<div>是否为第一页：<span th:text="${model.blogModel.isFirstPage}"></span></div>-->
+    <!--<div>是否为最后一页：<span th:text="${model.blogModel.isLastPage}"></span></div>-->
+    <!--<div>是否有前一页：<span th:text="${model.blogModel.hasPreviousPage}"></span></div>-->
+    <!--<div>是否有下一页：<span th:text="${model.blogModel.hasNextPage}"></span></div>-->
+<!--</nav>-->
+
+
+<!--<nav data-th-fragment="page" data-th-if="${model.blogModel.total} gt 0" data-th-object="${model.blogModel.pageNum}">-->
+
+<!--&lt;!&ndash; 处理页数小于等于7 的情况 &ndash;&gt;-->
+<!--<ul class="pagination" data-th-if="${model.blogModel.total} le 7">-->
+<!--&lt;!&ndash; 总记录数 &ndash;&gt;-->
+<!--<li class="tbpage-total-elements disabled">共[[${model.blogModel.size}]]条</li>-->
+
+<!--&lt;!&ndash; 页面大小 &ndash;&gt;-->
+<!--&lt;!&ndash;<select class="custom-select tbpage-size" data-th-attr="pageIndex=${model.blogModel.size}">&ndash;&gt;-->
+<!--&lt;!&ndash;<option data-th-each="i : ${#arrays.toIntegerArray({5,10,40,100})}" data-th-value="${i}"&ndash;&gt;-->
+<!--&lt;!&ndash;data-th-selected="${i eq page.size}" data-th-text="${i}"></option>&ndash;&gt;-->
+<!--&lt;!&ndash;</select>&ndash;&gt;-->
+
+<!--&lt;!&ndash; 上一页 &ndash;&gt;-->
+<!--<li class="page-item" data-th-classappend="*{model.blogModel.isFirstPage} ? 'disabled' : ''">-->
+<!--<a href="javascript:void(0);" class="page-link tbpage-item"-->
+<!--data-th-attr="pageIndex=${model.blogModel.pageNum} - 1" aria-label="Previous">-->
+<!--<span aria-hidden="true">«</span>-->
+<!--</a>-->
+<!--</li>-->
+
+<!--&lt;!&ndash; 迭代生成页码 &ndash;&gt;-->
+<!--&lt;!&ndash;<li class="page-item" data-th-each="i : ${#numbers.sequence(1, page.totalPages)}"&ndash;&gt;-->
+<!--&lt;!&ndash;data-th-classappend="${(page.number + 1) eq i} ? 'active' : ''" >&ndash;&gt;-->
+<!--&lt;!&ndash;<a class="page-link tbpage-item" data-th-attr="pageIndex=${i} - 1" href="javascript:void(0);">&ndash;&gt;-->
+<!--&lt;!&ndash;<span data-th-text="${i}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+<!--&lt;!&ndash;</li>&ndash;&gt;-->
+
+<!--&lt;!&ndash; 下一页 &ndash;&gt;-->
+<!--<li class="page-item" data-th-classappend="*{model.blogModel.isLastPage} ? 'disabled' : ''">-->
+<!--<a href="javascript:void(0);" class="page-link tbpage-item"-->
+<!--data-th-attr="pageIndex=${model.blogModel.pageNum} + 1" aria-label="Next">-->
+<!--<span aria-hidden="true">»</span>-->
+<!--</a>-->
+<!--</li>-->
+<!--</ul>-->
+
+<!--&lt;!&ndash; 处理页数大于7 的情况 &ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<ul class="pagination" data-th-if="${page.totalPages} gt 7">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 总记录数 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="tbpage-total-elements disabled">共[[${page.total}]]条</li>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 页面大小 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<select class="custom-select tbpage-size" data-th-attr="pageIndex=${page.number}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<option data-th-each="i : ${#arrays.toIntegerArray({5,10,40,100})}" data-th-value="${i}"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;data-th-selected="${i eq page.size}" data-th-text="${i}"></option>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</select>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 上一页 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item" data-th-classappend="*{first} ? 'disabled' : ''">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} - 1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;aria-label="Previous">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span aria-hidden="true">«</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 首页 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item" data-th-classappend="${(page.number + 1) eq 1} ? 'active' : ''">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=0">1</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 当前页面小于等于4 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item" data-th-if="${(page.number + 1) le 4}" data-th-each="i : ${#numbers.sequence(2,5)}"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;data-th-classappend="${(page.number + 1) eq i} ? 'active' : ''">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a class="page-link tbpage-item" href="javascript:void(0);" data-th-attr="pageIndex=${i} - 1">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span data-th-text="${i}"></span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item disabled" data-th-if="${(page.number + 1) le 4}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span aria-hidden="true">...</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 最后一页与当前页面之差，小于等于3 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item disabled" data-th-if="${(page.totalPages-(page.number + 1)) le 3}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span aria-hidden="true">...</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item" data-th-if="${(page.totalPages-(page.number + 1)) le 3}"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;data-th-each="i : ${#numbers.sequence(page.totalPages-4, page.totalPages-1)}"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;data-th-classappend="${(page.number + 1) eq i} ? 'active' : ''">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a class="page-link tbpage-item" href="javascript:void(0);" data-th-attr="pageIndex=${i} - 1">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span data-th-text="${i}"></span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 最后一页与当前页面之差大于3，且  当前页面大于4&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item disabled"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span aria-hidden="true">...</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item" data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number}">[[${page.number}]]</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item active"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} + 1">[[${page.number&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;+ 1}]]</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item" data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} + 2">[[${page.number&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;+ 2}]]</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item disabled"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;data-th-if="${((page.number + 1) gt 4) && ((page.totalPages-(page.number + 1)) gt 3 )}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span aria-hidden="true">...</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 最后一页 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item" data-th-classappend="${(page.number + 1) eq page.totalPages} ? 'active' : ''">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.totalPages} - 1">[[${page.totalPages}]]</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash; 下一页 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<li class="page-item" data-th-classappend="*{last} ? 'disabled' : ''">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<a href="javascript:void(0);" class="page-link tbpage-item" data-th-attr="pageIndex=${page.number} + 1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;aria-label="Next">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span aria-hidden="true">»</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</ul>&ndash;&gt;&ndash;&gt;-->
+
+
+<!--</nav>-->
+</div>
+</body>
+</html>

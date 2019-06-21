@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<!--<head th:replace="~{fragment/header :: header}"></head>-->
+<body>
+<!-- Page Content -->
+<div class="container blog-content-container">
+
+    <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+
+            <div th:each="blogs : ${model.blogModel.list}">
+                <!-- Blog Post -->
+                <div class="card mb-4">
+                    <div class="card-block">
+                        <h2 class="card-title">
+							<span>
+			                  <a th:href="'/u/' + ${blogs.user.username}" th:title="${blogs.user.username}">
+			                    <img src="/images/avatar-defualt.jpg"
+                                     th:src="${blogs.user.avatar} == null ? '/images/avatar-defualt.jpg' : ${blogs.user.avatar}"
+                                     class="blog-avatar-50">
+			                  </a>
+					        </span>
+                            <a class="card-link" th:href="'/u/' + ${blogs.user.username} + '/blogs/' + ${blogs.id}"
+                               th:title="${blogs.user.username}" th:text="${blogs.title}">
+                                OAuth 2.0 认证的原理与实践
+                            </a></h2>
+                        <p class="card-text" th:text="${blogs.summary}">使用 OAuth 2.0
+                            认证的的好处是显然易见的。你只需要用同一个账号密码，就能在各个网站进行访问，而免去了在每个网站都进行注册的繁琐过程。 本文将介绍
+                            OAuth 2.0 的原理，并基于 Spring Security 和 GitHub 账号，来演示 OAuth 2.0 的认证的过程。</p>
+                        <div class="card-text">
+                            发表于 <span th:text="${blogs.createtime}"></span> <i class="fa fa-eye" aria-hidden="true"
+                                                                                    th:text="${blogs.reading}">210</i>
+                            <i class="fa fa-heart-o" aria-hidden="true" th:text="${blogs.likes}">10</i> <i
+                                class="fa fa-comment-o"
+                                aria-hidden="true" th:text="${blogs.comments}">110</i>
+                        </div>
+                        <a th:href="'/u/' + ${blogs.user.username} + '/blogs/edit/' + ${blogs.id}" class="btn btn-primary float-right">编辑</a>
+                        <a th:href="'/u/' + ${blogs.user.username} + '/blogs/delete/' + ${blogs.id}" class="btn btn-primary float-right blog-delete-blog">删除</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div th:replace="~{fragment/page :: page}">...</div>
+            <!--<div class="container">-->
+                <!--<div class="row pad-15">-->
+                    <!--<div class="col-md-12">-->
+                        <!--<nav class="pagination-outer" aria-label="Page navigation" data-th-fragment="page"-->
+                             <!--data-th-if="${model.blogModel.total} gt 0" data-th-object="${model.blogModel.pageNum}">-->
+                            <!--<ul class="pagination">-->
+                                <!--<li class="page-item" th:if="${model.blogModel.hasPreviousPage}">-->
+                                    <!--<a class="page-link" id="changePage0" th:attr="pageNum=1">首页</a>-->
+                                <!--</li>-->
+                                <!--<li class="page-item"  th:if="${model.blogModel.hasPreviousPage}">-->
+                                    <!--<a href="#" class="page-link" aria-label="Previous" id="changePage1" th:attr="pageNum=${model.blogModel.prePage}">-->
+                                        <!--<span aria-hidden="true">«</span>-->
+                                    <!--</a>-->
+                                <!--</li>-->
+                                <!--&lt;!&ndash;<li class="page-item" th:each="nav:${model.blogModel.navigatepageNums}">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<a class="page-link" th:text="${nav}"&ndash;&gt;-->
+                                       <!--&lt;!&ndash;th:if="${nav != model.blogModel.pageNum}" id="changePage" th:attr="pageNum=${nav}">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<span style="font-weight: bold;background: #6faed9;" th:if="${nav == model.blogModel.pageNum}"&ndash;&gt;-->
+                                  <!--&lt;!&ndash;th:text="${nav}"></span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                                <!--<li class="page-item" th:if="${model.blogModel.hasNextPage}">-->
+                                    <!--<a href="#" class="page-link" aria-label="Next" id="changePage3" th:attr="pageNum=${model.blogModel.nextPage}">-->
+                                        <!--<span aria-hidden="true">»</span>-->
+                                    <!--</a>-->
+                                <!--</li>-->
+                                <!--<li class="page-item">-->
+                                    <!--<a class="page-link" id="changePage4" th:attr="pageNum=${model.blogModel.pages}">尾页</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                            <!--<div class="col-md-12">-->
+                                <!--当前第 [[${model.blogModel.pageNum}]]页,共 [[${model.blogModel.pages}]] 页.共查询到 [[${model.blogModel.total}]] 条记录-->
+                            <!--</div>-->
+                        <!--</nav>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+</body>
+<script>
+    $(function () {
+        $("#changePage0").click(function () {
+            var pageNum = $(this).attr("pageNum");
+            $.ajax({
+                url: '/blogs?pageNum=' + pageNum,
+                success: function(data){
+                    $("#rightContainer").html(data);
+                },
+                error : function() {
+                    alert("error");
+                }
+            });
+        });
+
+        $("#changePage1").click(function () {
+            var pageNum = $(this).attr("pageNum");
+            $.ajax({
+                url: '/blogs?pageNum=' + pageNum,
+                success: function(data){
+                    $("#rightContainer").html(data);
+                },
+                error : function() {
+                    alert("error");
+                }
+            });
+        });
+
+
+        $("#changePage3").click(function () {
+            var pageNum = $(this).attr("pageNum");
+            $.ajax({
+                url: '/blogs?pageNum=' + pageNum,
+                success: function(data){
+                    $("#rightContainer").html(data);
+                },
+                error : function() {
+                    alert("error");
+                }
+            });
+        });
+
+        $("#changePage4").click(function () {
+            var pageNum = $(this).attr("pageNum");
+            $.ajax({
+                url: '/blogs?pageNum=' + pageNum,
+                success: function(data){
+                    $("#rightContainer").html(data);
+                },
+                error : function() {
+                    alert("error");
+                }
+            });
+        });
+    });
+</script>
+</html>

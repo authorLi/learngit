@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div class="wrapper">
+    <!-- Page Content -->
+    <div th:replace="~{fragment/header :: header}"></div>
+    <div class="container blog-content-container">
+
+        <div class="row">
+
+            <!-- Blog Entries Column -->
+            <div class="col-md-8" id="mainContainer">
+
+                <div th:each="blogs : ${model.blogModel.list}">
+                    <!-- Blog Post -->
+                    <div class="card mb-4">
+                        <div class="card-block">
+                            <h2 class="card-title">
+							<span>
+			                  <a th:href="'/u/' + ${blogs.user.username}" th:title="${blogs.user.username}">
+			                    <img src="/images/avatar-defualt.jpg"
+                                     th:src="${blogs.user.avatar} == null ? '/images/avatar-defualt.jpg' : ${blogs.user.avatar}"
+                                     class="blog-avatar-50">
+			                  </a>
+					        </span>
+                                <a class="card-link"
+                                   th:href="'/u/' + ${blogs.user.username} + '/blogs/' + ${blogs.id}"
+                                   th:title="${blogs.user.username}" th:text="${blogs.title}">
+                                    OAuth 2.0 认证的原理与实践
+                                </a></h2>
+                            <p class="card-text" th:text="${blogs.summary}">使用 OAuth 2.0
+                                认证的的好处是显然易见的。你只需要用同一个账号密码，就能在各个网站进行访问，而免去了在每个网站都进行注册的繁琐过程。 本文将介绍
+                                OAuth 2.0 的原理，并基于 Spring Security 和 GitHub 账号，来演示 OAuth 2.0 的认证的过程。</p>
+                            <div class="card-text">
+                                发表于 <span th:text="${blogs.createtime}"></span> <i class="fa fa-eye"
+                                                                                   aria-hidden="true"
+                                                                                   th:text="${blogs.reading}">210</i>
+                                <i class="fa fa-heart-o" aria-hidden="true" th:text="${blogs.likes}">10</i> <i
+                                    class="fa fa-comment-o"
+                                    aria-hidden="true" th:text="${blogs.comments}">110</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div th:replace="~{fragment/page :: page}">...</div>
+            </div>
+
+            <!-- 右侧栏目 -->
+            <div class="col-md-4" style="clear: left">
+                <div>
+                    <!-- 热门标签 -->
+                    <div class="card ">
+                        <h5 class="card-header"><i class="fa fa-tags" aria-hidden="true"></i> 热门标签</h5>
+                        <div class="card-block">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a th:each="tag,tagStat : ${model.tagList}" th:object="${tag.tags}"
+                                       href="/blogs?keyword=web"
+                                       th:href="'/u/' + ${tag.user.username} + '/blogs?keyword=' + ${tag.tags}">
+                                        <span class="badge"
+                                              th:classappend="${tagStat.index} eq 0 ? 'badge-danger' : (${tagStat.index} eq 1 ? 'badge-warning' : (${tagStat.index} eq 2 ? 'badge-info' : 'badge-default'))"
+                                              th:text="${tag.tags}">Web Design</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 热门用户 -->
+                    <div class="card my-4">
+                        <h5 class="card-header"><i class="fa fa-users" aria-hidden="true"></i> 热门用户</h5>
+                        <div class="card-block">
+                            <div class="row">
+                                <div class="col-lg-12">
+									<span th:each="user : ${model.hotUsers}">
+					                  <a th:href="'/u/' + ${user.username}" th:title="${user.username}">
+			                    <img src="/images/avatar-defualt.jpg"
+                                     th:src="${user.avatar} == null ? '/images/avatar-defualt.jpg' : ${user.avatar}"
+                                     class="blog-avatar-50">
+                                      </a>
+					                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 热门文章 -->
+                    <div class="card my-4">
+                        <h5 class="card-header"><i class="fa fa-fire" aria-hidden="true"></i> 热门文章</h5>
+
+                        <ul class="list-group" th:each="hotblog , hotblogStat : ${model.hotest}" th:object="${hotblog}">
+                            <a th:href="'/u/' + *{user.username} + '/blogs/' + *{id}" class="list-group-item">
+                                [[*{title}]]<span class="badge badge-pill"
+                                                  th:classappend="${hotblogStat.index} eq 0 ? 'badge-danger': (${hotblogStat.index} eq 1 ? 'badge-warning':(${hotblogStat.index} eq 2 ? 'badge-info':'badge-default'))">[[*{comments + likes}]]</span>
+                            </a>
+                        </ul>
+
+                    </div>
+
+                    <!-- 最新发布 -->
+                    <div class="card my-4">
+                        <h5 class="card-header"><i class="fa fa-line-chart" aria-hidden="true"></i> 最新发布</h5>
+                        <div class="list-group">
+                            <ul class="list-group" th:each="newblog : ${model.newest}" th:object="${newblog}">
+                                <a th:href="'/u/' + *{user.username} + '/blogs/' + *{id}" class="list-group-item"
+                                   th:text="*{title}">
+                                </a>
+
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+
+    <div th:replace="~{fragment/footer :: footer}">...</div>
+</div>
+</body>
+</html>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">-->
+<!--<head th:replace="~{fragment/header :: header}"></head>-->
+<!--<head></head>-->
+<!--<body>-->
+<!--<div class="container blog-content-container">-->
+<!--<shiro:authenticated>-->
+<!--<p>已有用户登录</p>-->
+<!--<p>登录的用户为:-->
+<!--<shiro:principal/>-->
+<!--</p>-->
+<!--<p>用户角色为:-->
+<!--<shiro:hasRole name="admin">admin</shiro:hasRole>-->
+<!--<shiro:hasRole name="user">,user</shiro:hasRole>-->
+<!--</p>-->
+<!--</shiro:authenticated>-->
+<!--<shiro:notAuthenticated>-->
+<!--<p>未有登录用户</p>-->
+<!--</shiro:notAuthenticated>-->
+
+<!--</div>-->
+<!--<div th:replace="~{fragment/footer :: footer}"></div>-->
+
+<!--</body>-->
+<!--</html>-->
